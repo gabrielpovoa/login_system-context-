@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { Container } from "./Applicationstyle"
+import { AuthContext } from "./Contexts/Auth/AuthContext"
+import { RoutList } from "./Routesystem"
+const App = () => {
+  const auth = useContext(AuthContext)
+  const navigate = useNavigate()
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+  const handleSignOut = async () => {
+    await auth.signout()
+    navigate('/');
+  }
+
+  return <>
+    <Container>
+      <header>
+        <h1>Login React System</h1>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/private">Sign In</Link>
+          { auth.user &&
+            <Link to="/" onClick={handleSignOut}> Sign Out</Link>
+          }
+        </nav>
       </header>
-    </div>
-  );
+      <RoutList />
+    </Container>
+  </>
 }
 
-export default App;
+export default App
